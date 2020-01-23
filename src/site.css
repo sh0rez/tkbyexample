@@ -1,0 +1,157 @@
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+/* Layout and typography */
+body {
+  font-family: "Source Sans Pro", serif;
+  font-size: 16px;
+  /* line-height: 20px; */
+  line-height: 1.5;
+  font-weight: 400;
+  color: #252519;
+}
+em {
+  font-style: italic;
+}
+
+a,
+a:visited {
+  color: #0b5fff;
+}
+
+h2 {
+  color: #2d3747;
+  font-size: 32px;
+  line-height: 40px;
+  margin-top: 40px;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+h2 a,
+h2 a:visited {
+  color: #2d3747;
+  text-decoration: none;
+}
+h2 a:hover {
+  text-decoration: underline;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1000px;
+}
+
+main div {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+div.example table {
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+p.next {
+  margin-bottom: 20px;
+}
+p.footer {
+  color: grey;
+}
+p.footer a,
+p.footer a:visited {
+  color: grey;
+}
+div#intro {
+  width: 420px;
+  min-width: 420px;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 120px;
+}
+div#intro p {
+  padding-top: 20px;
+}
+div#intro ul {
+  padding-top: 20px;
+}
+table td {
+  border: 0;
+  outline: 0;
+}
+table tr {
+  display: flex;
+}
+td.docs {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 450px;
+
+  min-height: 5px;
+  vertical-align: top;
+  text-align: left;
+}
+td.docs p {
+  padding-right: 5px;
+  padding-bottom: 15px;
+}
+td.code {
+  flex-grow: 1;
+  flex-basis: 450px;
+  flex-shrink: 0;
+
+  padding-top: 5px;
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-bottom: 5px;
+  vertical-align: top;
+  background: #f0f0f0;
+}
+td.code.leading {
+  padding-bottom: 11px;
+}
+td.code.empty {
+  background: #ffffff;
+}
+pre,
+code {
+  font-size: 14px;
+  line-height: 18px;
+  font-family: "Fira Mono", "Menlo", "Monaco", "Consolas", "Lucida Console",
+    monospace;
+}
+code {
+  background: #f0f0f0;
+}
+img.copy,
+img.run {
+  height: 16px;
+  width: 16px;
+  float: right;
+}
+img.copy,
+img.run {
+  cursor: pointer;
+}
+img.copy {
+  margin-right: 4px;
+}
+
+.light-default-light {
+  background-color: inherit !important;
+}

@@ -1,0 +1,43 @@
+{
+  "name": "tkbyexample",
+  "private": true,
+  "description": "Tanka examples",
+  "version": "0.1.0",
+  "author": "sh0rez",
+  "dependencies": {
+    "gatsby": "^2.18.12",
+    "gatsby-remark-vscode": "^1.4.0",
+    "gatsby-source-filesystem": "^2.1.46",
+    "gatsby-transformer-remark": "^2.6.48",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "request": "^2.88.0",
+    "reset-css": "^5.0.1",
+    "typeface-fira-mono": "^0.0.72",
+    "typeface-source-sans-pro": "^0.0.75"
+  },
+  "devDependencies": {
+    "prettier": "^1.19.1"
+  },
+  "keywords": [
+    "gatsby"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "gatsby build",
+    "dev": "gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "start": "npm run develop",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grafana/tanka"
+  },
+  "bugs": {
+    "url": "https://github.com/grafana/tanka/issues"
+  }
+}
