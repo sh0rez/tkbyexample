@@ -3,7 +3,9 @@ package main
 import (
 	"bytes"
 	"encoding/base64"
+	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -11,6 +13,10 @@ import (
 )
 
 func render() error {
+	if err := os.MkdirAll("dist", os.ModePerm); err != nil {
+		return err
+	}
+
 	examples, err := parseExamples()
 	if err != nil {
 		return err
@@ -67,7 +73,7 @@ func renderExamples(examples []*Example) error {
 		tmpl.Execute(&buf, example)
 
 		if err := ioutil.WriteFile(filepath.Join("dist", example.ID+".md"), buf.Bytes(), 0644); err != nil {
-			return err
+			return fmt.Errorf("writing %s: %w", example.ID, err)
 		}
 	}
 	return nil
@@ -121,12 +127,12 @@ func parseExamples() ([]*Example, error) {
 func parseSegs(sourcePath string) ([]*Seg, error) {
 
 	var lines []string
-	// Convert tabs to spaces for uniform rendering.
 	lines, err := readLines(sourcePath)
 	if err != nil {
 		return nil, err
 	}
 
+	// Convert tabs to spaces for uniform rendering.
 	for _, line := range lines {
 		lines = append(lines, strings.Replace(line, "\t", "    ", -1))
 	}

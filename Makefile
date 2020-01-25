@@ -1,2 +1,11 @@
-dev:
-	go run ./gen dev
+.DEFAULT_GOAL := dev
+
+clean:
+	yarn clean
+	rm -rf dist
+
+build: render
+	yarn build
+
+%:
+	go run ./gen $@
