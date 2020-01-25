@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "sh0rez",
   "dependencies": {
+    "clipboard-polyfill": "^2.8.6",
     "gatsby": "^2.18.12",
     "gatsby-remark-vscode": "^1.4.0",
     "gatsby-source-filesystem": "^2.1.46",
@@ -12,6 +13,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "rehype-react": "^4.0.1",
     "request": "^2.88.0",
     "reset-css": "^5.0.1",
     "typeface-fira-mono": "^0.0.72",

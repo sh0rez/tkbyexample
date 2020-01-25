@@ -111,6 +111,7 @@ td.docs p {
   padding-bottom: 15px;
 }
 td.code {
+  position: relative;
   flex-grow: 1;
   flex-basis: 450px;
   flex-shrink: 0;
@@ -128,6 +129,24 @@ td.code.leading {
 td.code.empty {
   background: #ffffff;
 }
+td.code button {
+  position: absolute;
+  right: 0;
+  top: -1.5em;
+
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+}
+td.code button:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+td:hover .code button {
+  color: red;
+}
+
 pre,
 code {
   font-size: 14px;

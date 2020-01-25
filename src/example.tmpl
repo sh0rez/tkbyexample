@@ -5,10 +5,11 @@ path: /{{ .ID }}
 
 ## [Tanka by Example](/): {{ .Name }}
 
+{{$codeRaw := .CodeRaw}}
 {{ range .Segs }}
 
 <table>
-{{ range . }}
+{{ range $i, $e := . }}
 <tr>
 <td class="docs">
 
@@ -16,6 +17,8 @@ path: /{{ .ID }}
 
 </td>
 <td class="code{{if .CodeEmpty}} empty{{end}}{{if .CodeLeading}} leading{{end}}">
+{{if eq $i 1}}<copy-button code="{{$codeRaw}}">Copy</copy-button>{{end}}
+
 
 ```jsonnet
 {{ .Code }}

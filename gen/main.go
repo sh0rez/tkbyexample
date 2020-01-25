@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/base64"
 	"io/ioutil"
 	"log"
 	"os"
@@ -22,6 +23,7 @@ func main() {
 	defer w.Close()
 	w.SetMaxEvents(1)
 	w.AddRecursive("./src/examples")
+	w.Add("./src/example.tmpl")
 
 	go func() {
 		for {
@@ -67,18 +69,36 @@ var dashPat = regexp.MustCompile("\\-+")
 
 // Seg is a segment of an example
 type Seg struct {
-	Docs, DocsRendered              string
-	Code, CodeRendered, CodeForJs   string
+	Docs                            string
+	Code                            string
 	CodeEmpty, CodeLeading, CodeRun bool
 }
 
 // Example is info extracted from an example file
 type Example struct {
-	ID, Name                    string
-	GoCode, GoCodeHash, URLHash string
-	Segs                        [][]*Seg
-	PrevExample                 *Example
-	NextExample                 *Example
+	ID, Name string
+	Segs     [][]*Seg
+}
+
+func (e Example) CodeRaw() string {
+	buf := ""
+	for _, seg := range e.Segs {
+		buf += joinSeg(seg) + "\n"
+	}
+	buf = strings.TrimSuffix(buf, "\n")
+
+	return base64.StdEncoding.EncodeToString([]byte(buf))
+}
+
+func joinSeg(seg []*Seg) string {
+	buf := ""
+	for _, s := range seg {
+		if s.CodeEmpty {
+			continue
+		}
+		buf += s.Code + "\n"
+	}
+	return strings.TrimSuffix(buf, "\n")
 }
 
 func renderExamples(examples []*Example) {
@@ -117,7 +137,7 @@ func parseExamples() []*Example {
 		sourcePaths := mustGlob("src/examples/" + exampleID + "/*")
 
 		for _, sourcePath := range sourcePaths {
-			sourceSegs := parseAndRenderSegs(sourcePath)
+			sourceSegs := parseSegs(sourcePath)
 			example.Segs = append(example.Segs, sourceSegs)
 		}
 
@@ -172,22 +192,6 @@ func parseSegs(sourcePath string) []*Seg {
 		seg.CodeLeading = (i < (len(segs) - 1))
 		seg.CodeRun = strings.Contains(seg.Code, "package main")
 	}
-	return segs
-}
-
-func parseAndRenderSegs(sourcePath string) []*Seg {
-	segs := parseSegs(sourcePath)
-
-	for _, seg := range segs {
-		if seg.Docs != "" {
-			seg.DocsRendered = seg.Docs
-		}
-		if seg.Code != "" {
-			// seg.CodeRendered = fmt.Sprintf("<pre>%s</pre>", seg.Code)
-			seg.CodeRendered = seg.Code
-		}
-	}
-
 	return segs
 }
 
