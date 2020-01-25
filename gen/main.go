@@ -4,13 +4,60 @@ import (
 	"bytes"
 	"io/ioutil"
 	"log"
+	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strings"
 	"text/template"
+	"time"
+
+	"github.com/radovskyb/watcher"
 )
 
 func main() {
+	render()
+
+	w := watcher.New()
+	defer w.Close()
+	w.SetMaxEvents(1)
+	w.AddRecursive("./src/examples")
+
+	go func() {
+		for {
+			watch(w)
+		}
+	}()
+
+	go gatsbyDevelop()
+
+	if err := w.Start(time.Millisecond * 100); err != nil {
+		log.Fatalln(err)
+	}
+}
+
+func watch(w *watcher.Watcher) {
+	select {
+	case <-w.Event:
+		render()
+	case err := <-w.Error:
+		log.Fatalln(err)
+	case <-w.Closed:
+		return
+	}
+}
+
+func gatsbyDevelop() {
+	cmd := exec.Command("yarn", "dev")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	if err := cmd.Run(); err != nil {
+		log.Fatalln(err)
+	}
+}
+
+func render() {
 	examples := parseExamples()
 	renderExamples(examples)
 }
@@ -77,14 +124,6 @@ func parseExamples() []*Example {
 		examples = append(examples, &example)
 	}
 
-	// for i, example := range examples {
-	// 	if i > 0 {
-	// 		example.PrevExample = examples[i-1]
-	// 	}
-	// 	if i < (len(examples) - 1) {
-	// 		example.NextExample = examples[i+1]
-	// 	}
-	// }
 	return examples
 }
 
