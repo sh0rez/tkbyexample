@@ -10,6 +10,8 @@ import (
 	"regexp"
 	"strings"
 	"text/template"
+
+	"gopkg.in/yaml.v3"
 )
 
 func render() error {
@@ -17,7 +19,7 @@ func render() error {
 		return err
 	}
 
-	examples, err := parseExamples()
+	examples, err := loadExamples()
 	if err != nil {
 		return err
 	}
@@ -37,8 +39,12 @@ type Seg struct {
 
 // Example is info extracted from an example file
 type Example struct {
-	ID, Name string
-	Segs     [][]*Seg
+	Name        string   `yaml:"name"`
+	Description string   `yaml:"description"`
+	Ignore      []string `yaml:"ignore"`
+
+	ID   string   `yaml:"-"`
+	Segs [][]*Seg `yaml:"-"`
 }
 
 func (e Example) CodeRaw() string {
@@ -79,46 +85,60 @@ func renderExamples(examples []*Example) error {
 	return nil
 }
 
-func parseExamples() ([]*Example, error) {
-	var exampleNames []string
-
-	lines, err := readLines("examples.txt")
+func loadExamples() ([]*Example, error) {
+	var dirs []string
+	root, err := filepath.Abs("./src/examples")
 	if err != nil {
 		return nil, err
 	}
 
-	for _, line := range lines {
-		if line != "" && !strings.HasPrefix(line, "#") {
-			exampleNames = append(exampleNames, line)
+	filepath.Walk("src/examples", func(path string, fi os.FileInfo, err error) error {
+		path, _ = filepath.Abs(path)
+		if filepath.Base(path) != "x.yml" {
+			return nil
 		}
-	}
 
-	examples := make([]*Example, 0)
-	for _, exampleName := range exampleNames {
-		example := Example{Name: exampleName}
+		dirs = append(dirs, filepath.Dir(path))
+		return nil
+	})
 
-		exampleID := strings.ToLower(exampleName)
-		exampleID = strings.Replace(exampleID, " ", "-", -1)
-		exampleID = strings.Replace(exampleID, "/", "-", -1)
-		exampleID = strings.Replace(exampleID, "'", "", -1)
-		exampleID = dashPat.ReplaceAllString(exampleID, "-")
-		example.ID = exampleID
+	examples := make([]*Example, 0, len(dirs))
+	for _, d := range dirs {
+		data, err := ioutil.ReadFile(filepath.Join(d, "x.yml"))
+		if err != nil {
+			return nil, err
+		}
 
-		example.Segs = make([][]*Seg, 0)
-		sourcePaths, err := filepath.Glob("src/examples/" + exampleID + "/*")
+		rel, err := filepath.Rel(root, d)
+		if err != nil {
+			return nil, err
+		}
+
+		e := Example{
+			ID: rel,
+		}
+		if err := yaml.Unmarshal(data, &e); err != nil {
+			return nil, fmt.Errorf("parsing config for %s: %w", d, err)
+		}
+
+		e.Segs = make([][]*Seg, 0)
+		sourcePaths, err := filepath.Glob(d + "/*")
 		if err != nil {
 			return nil, err
 		}
 
 		for _, sourcePath := range sourcePaths {
+			if filepath.Base(sourcePath) == "x.yml" {
+				continue
+			}
 			sourceSegs, err := parseSegs(sourcePath)
 			if err != nil {
 				return nil, err
 			}
-			example.Segs = append(example.Segs, sourceSegs)
+			e.Segs = append(e.Segs, sourceSegs)
 		}
 
-		examples = append(examples, &example)
+		examples = append(examples, &e)
 	}
 
 	return examples, nil
