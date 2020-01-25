@@ -1,2 +1,2 @@
 dev:
-	go run ./gen
+	go run ./gen dev
