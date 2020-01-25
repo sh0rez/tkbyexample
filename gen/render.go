@@ -133,8 +133,8 @@ func parseSegs(sourcePath string) ([]*Seg, error) {
 	}
 
 	// Convert tabs to spaces for uniform rendering.
-	for _, line := range lines {
-		lines = append(lines, strings.Replace(line, "\t", "    ", -1))
+	for i, line := range lines {
+		lines[i] = strings.Replace(line, "\t", "    ", -1)
 	}
 	segs := []*Seg{}
 	lastSeen := ""
