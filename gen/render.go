@@ -14,6 +14,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+const configFile = ".x.yml"
+
 func render() error {
 	if err := os.MkdirAll("dist", os.ModePerm); err != nil {
 		return err
@@ -94,7 +96,7 @@ func loadExamples() ([]*Example, error) {
 
 	filepath.Walk("src/examples", func(path string, fi os.FileInfo, err error) error {
 		path, _ = filepath.Abs(path)
-		if filepath.Base(path) != "x.yml" {
+		if filepath.Base(path) != configFile {
 			return nil
 		}
 
@@ -104,7 +106,7 @@ func loadExamples() ([]*Example, error) {
 
 	examples := make([]*Example, 0, len(dirs))
 	for _, d := range dirs {
-		data, err := ioutil.ReadFile(filepath.Join(d, "x.yml"))
+		data, err := ioutil.ReadFile(filepath.Join(d, configFile))
 		if err != nil {
 			return nil, err
 		}
@@ -128,7 +130,7 @@ func loadExamples() ([]*Example, error) {
 		}
 
 		for _, sourcePath := range sourcePaths {
-			if filepath.Base(sourcePath) == "x.yml" {
+			if strings.HasPrefix(filepath.Base(sourcePath), ".") {
 				continue
 			}
 			sourceSegs, err := parseSegs(sourcePath)
