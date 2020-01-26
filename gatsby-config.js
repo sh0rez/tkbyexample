@@ -32,5 +32,18 @@ module.exports = {
         ],
       },
     },
+    `gatsby-plugin-catch-links`,
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: "Tanka by Example",
+        short: "tkx",
+        icon: "src/img/tkx.png",
+        start_url: "/",
+        display: "standalone",
+        background_color: "#ffffff",
+        theme_color: "#000000",
+      },
+    },
   ],
 }
