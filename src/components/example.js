@@ -4,6 +4,7 @@ import rehypeReact from "rehype-react"
 import * as clipboard from "clipboard-polyfill"
 
 import "../site.css"
+import Footer from "./footer"
 
 const CopyButton = props => (
   <button
@@ -38,13 +39,7 @@ const Template = ({ data }) => {
         {renderAst(htmlAst)}
 
         <div>
-          <p className="footer">
-            Inspired by <a href="https://gobyexample.com">gobyexample.com</a> |{" "}
-            <a href="https://github.com/sh0rez/tkbyexample">source</a> |{" "}
-            <a href="https://github.com/sh0rez/tkbyexample/blob/master/LICENSE">
-              license
-            </a>
-          </p>
+          <Footer></Footer>
         </div>
       </main>
     </div>
