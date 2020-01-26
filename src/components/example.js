@@ -1,7 +1,9 @@
 import React from "react"
 import { graphql } from "gatsby"
 import rehypeReact from "rehype-react"
+
 import * as clipboard from "clipboard-polyfill"
+import { Helmet } from "react-helmet"
 
 import "../site.css"
 import Footer from "./footer"
@@ -35,6 +37,11 @@ const Template = ({ data }) => {
   const { htmlAst, frontmatter } = markdownRemark
   return (
     <div className="center">
+      <Helmet defer={false}>
+        <title>Tanka by Example: {frontmatter.title}</title>
+        <title>{frontmatter.title} | Tanka by Example</title>
+        <meta name="description" value="{frontmatter.description || ''}" />
+      </Helmet>
       <main>
         {renderAst(htmlAst)}
 

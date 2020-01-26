@@ -12,6 +12,7 @@ module.exports = {
         name: `examples`,
       },
     },
+    `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-transformer-remark`,
       options: {

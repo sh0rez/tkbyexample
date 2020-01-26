@@ -1,10 +1,20 @@
 import React from "react"
 import { graphql, Link } from "gatsby"
 
+import { Helmet } from "react-helmet"
+
 import Footer from "../components/footer"
 
 const IndexPage = ({ data }) => (
   <div id="intro">
+    <Helmet defer={false}>
+      <title>Tanka by Example</title>
+      <meta
+        name="description"
+        value="Hands-on introduction to Grafana Tanka and Jsonnet using annotated
+        example programs, inspired by gobyexample.com"
+      />
+    </Helmet>
     <h2>Tanka by Example</h2>
     <p>
       <a href="https://tanka.dev">Grafana Tanka</a> is a composable
