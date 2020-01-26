@@ -32,6 +32,7 @@ const IndexPage = ({ data }) => (
       {data.allMarkdownRemark.nodes.map(n => (
         <li>
           <Link to={n.frontmatter.path}>{n.frontmatter.title}</Link>
+          {n.frontmatter.description ? ": " + n.frontmatter.description : ""}
         </li>
       ))}
     </ul>
@@ -48,6 +49,7 @@ export const query = graphql`
         frontmatter {
           path
           title
+          description
         }
       }
     }
