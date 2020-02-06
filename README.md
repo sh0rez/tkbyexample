@@ -30,6 +30,12 @@ For development purposes (file watching, etc):
 $ make dev
 ```
 
+or if you'd prefer to use Docker:
+
+```bash
+$ make dev-docker-build && make dev-docker
+```
+
 This will run the generator in watching mode (`go run ./gen dev`) and `gatsby develop` for you.
 
 ## Publishing
